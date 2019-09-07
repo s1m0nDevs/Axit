@@ -1,1 +1,187 @@
-function loadData(){return new Promise((e,t)=>{setTimeout(e,3e3)})}loadData().then(()=>{let e=document.getElementById("preloader");e.classList.add("hidden"),e.classList.remove("visible");let t=document.getElementsByTagName("body");t[0].classList.remove("overflow_hidden"),""==t[0].getAttribute("class")&&t[0].removeAttribute("class")});for(var bodyRect=document.body.getBoundingClientRect(),navLis=document.querySelectorAll(".top_menu_right li"),outPutValue={},heightSections={},numSec=0,i=0;i<navLis.length;i++)outPutValue[i]=navLis[i].dataset.value,heightSections[i]=document.querySelector("section."+outPutValue[i]).getBoundingClientRect().top-bodyRect.top-5;document.addEventListener("scroll",e=>{for(var t=document.querySelector("nav li.active");numSec<Object.keys(heightSections).length;)pageYOffset<heightSections[numSec+1]?(t.dataset.value!=outPutValue[numSec]&&(t.classList.remove("active"),navLis[numSec].classList.add("active")),numSec=heightSections.length):(pageYOffset>heightSections[Object.keys(heightSections).length-1]&&(numSec=Object.keys(heightSections).length,t.classList.remove("active"),navLis[numSec-1].classList.add("active")),numSec++);numSec=0});let menuRight=document.querySelector(".top_header .top_menu_right");document.querySelector(".top_header img.navbar").addEventListener("click",e=>{menuRight.getElementsByClassName("opened").length>0?(menuRight.classList.remove("opened"),menuRight.classList.add("dnone")):(menuRight.classList.add("opened"),menuRight.classList.remove("dnone"))}),document.querySelector(".top_header .top_menu_right a").addEventListener("click",e=>{menuRight.classList.remove("opened"),menuRight.classList.add("dnone")});const btns=document.querySelectorAll(".soft_transition .tabs_soft li"),items=document.querySelectorAll(".soft_transition .info_soft"),imgs=document.querySelectorAll(".soft_transition img");var valueTarget;function animeFunc(e,t){items[e-1].classList.toggle("anime-"+t),imgs[e-1].classList.toggle("anime-"+t),items[e-1].addEventListener("animationend",s=>{items[e-1].classList.remove("anime-"+t)}),imgs[e-1].addEventListener("animationend",s=>{imgs[e-1].classList.remove("anime-"+t)})}const setActive=e=>{for(let t=0;t<btns.length;t++)btns[t].querySelector("a").dataset.value==e?(btns[t].querySelector("a").classList.add("active"),setTimeout(function(){items[t].classList.add("visible-block"),imgs[t].classList.add("visible-block"),animeFunc(valueTarget,"after")},200)):(btns[t].querySelector("a").classList.remove("active"),setTimeout(function(){items[t].classList.remove("visible-block"),imgs[t].classList.remove("visible-block"),animeFunc(valueTarget,"after")},200))};document.querySelector("#soft_transition").addEventListener("click",e=>{var t=document.querySelector(".tabs_soft li a.active").dataset.value;return e.target.matches(".tabs_soft li a")&&e.target.dataset.value!=t&&(valueTarget=e.target.dataset.value,setActive(valueTarget),animeFunc(t,"before")),!1}),AOS.init({disable:"phone",startEvent:"DOMContentLoaded",initClassName:"aos-init",animatedClassName:"aos-animate",useClassNames:!1,disableMutationObserver:!1,debounceDelay:50,throttleDelay:99,offset:100,delay:0,duration:800,easing:"ease",once:!0,mirror:!1,anchorPlacement:"top-bottom"});
+// Preloader start
+function loadData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, 3000);//3000);
+  })
+}
+
+loadData()
+  .then(() => {
+    let preloaderEl = document.getElementById('preloader');
+    preloaderEl.classList.add('hidden');
+    preloaderEl.classList.remove('visible');
+
+    let bodyEl = document.getElementsByTagName('body');
+    bodyEl[0].classList.remove('overflow_hidden');
+    let str = bodyEl[0].getAttribute('class');
+    if(str == "")
+      bodyEl[0].removeAttribute('class');
+  });
+// Preloader end
+
+document.querySelectorAll('nav li').forEach(s=>{
+  s.addEventListener('click', event => {
+    event.preventDefault();
+   let target = event.target.parentElement.dataset.value;
+
+   console.log(target)
+
+    document.querySelector(`section[data-value='${target}']`).scrollIntoView({
+       block: "start",
+       behavior: "smooth"
+     })
+  })
+})
+
+let removeClassAttr = (el)=>{
+  let classAv = el.getAttribute('class');
+  if(classAv == null || classAv == '')
+    el.removeAttribute('class');
+}
+
+// Nav header get info start
+var bodyRect = document.body.getBoundingClientRect(),
+  navLis = document.querySelectorAll('.top_menu_right li'),
+  outPutValue = [],
+  heightSections = [],
+  numSec = 0; 
+
+for (var i = 0; i < navLis.length; i++) 
+{
+  outPutValue[i] = navLis[i].dataset.value;
+  heightSections[i] = document.querySelector(`section[data-value='${outPutValue[i]}']`).getBoundingClientRect().top - bodyRect.top-5;
+}
+// Nav header get info end
+
+// Nav active by section scroll start
+document.addEventListener('scroll',(e)=>{
+  var navLiActive = document.querySelector('nav li.active');
+
+  while (numSec < Object.keys(heightSections).length) 
+  {
+    if (pageYOffset < heightSections[numSec+1])
+    {
+      if (navLiActive.dataset.value != outPutValue[numSec])
+      {
+        navLiActive.classList.remove('active');
+        removeClassAttr(navLiActive);
+        navLis[numSec].classList.add('active');
+      }
+
+      numSec = heightSections.length;
+    }
+    else
+    {
+      if(pageYOffset > heightSections[Object.keys(heightSections).length-1])
+      {
+        numSec = Object.keys(heightSections).length;
+        navLiActive.classList.remove('active');
+        removeClassAttr(navLiActive);
+        navLis[numSec-1].classList.add('active');
+      }
+      numSec++;
+    }
+  }
+
+  numSec = 0;
+});
+// Nav active by section scroll end
+
+// Nav responsive start
+let menuRight = document.querySelector('.top_header .top_menu_right')
+
+document.querySelector('.top_header img.navbar').addEventListener('click',(e)=>{
+  if (menuRight.className.indexOf('opened') != -1)
+  {
+    menuRight.classList.remove('opened');
+    menuRight.classList.add('dnone');
+  }
+  else
+  {
+    menuRight.classList.add('opened');
+    menuRight.classList.remove('dnone');
+  }
+});
+
+document.querySelectorAll('.top_header .top_menu_right li').forEach(s=>{
+  s.addEventListener('click', event => {
+     menuRight.classList.remove('opened');
+     menuRight.classList.add('dnone');
+  })
+});
+// Nav responsive end
+
+
+// Tabs scroll start
+const btns = document.querySelectorAll('.soft_transition .tabs_soft li');
+const items = document.querySelectorAll('.soft_transition .info_soft');
+const imgs = document.querySelectorAll('.soft_transition img');
+var valueTarget;
+
+function animeFunc(targetParam,textParam)
+{
+  items[targetParam-1].classList.toggle('anime-'+textParam);
+  imgs[targetParam-1].classList.toggle('anime-'+textParam);
+  items[targetParam-1].addEventListener('animationend',e=>{
+      items[targetParam-1].classList.remove('anime-'+textParam);
+  });
+  imgs[targetParam-1].addEventListener('animationend',e=>{
+      imgs[targetParam-1].classList.remove('anime-'+textParam);
+  });
+}
+
+const setActive = (id)=>{
+  for(let i =0;i<btns.length;i++)
+  {
+    if(btns[i].querySelector('a').dataset.value==id)
+    {
+      btns[i].querySelector('a').classList.add('active');
+      setTimeout(function() {
+        items[i].classList.add('visible-block');
+        imgs[i].classList.add('visible-block');
+        animeFunc(valueTarget,"after"); },200);    
+    }
+    else
+    {
+      btns[i].querySelector('a').classList.remove('active');
+      setTimeout(function() {
+        items[i].classList.remove('visible-block');
+        imgs[i].classList.remove('visible-block');
+        animeFunc(valueTarget,"after"); },200);
+    }
+  }
+}
+
+document.querySelector('.soft_transition').addEventListener('click',(e)=>{
+  var activeBtn = document.querySelector('.tabs_soft li a.active').dataset.value;
+  if(e.target.matches('.tabs_soft li a') && !(e.target.dataset.value == activeBtn))
+  {
+    valueTarget = e.target.dataset.value;
+    setActive(valueTarget);
+    animeFunc(activeBtn,"before");
+  }
+  return false;
+});
+// Tabs scroll end
+
+AOS.init({
+  // Global settings:
+  disable: 'phone', // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
+  startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
+  initClassName: 'aos-init', // class applied after initialization
+  animatedClassName: 'aos-animate', // class applied on animation
+  useClassNames: false, // if true, will add content of `data-aos` as classes on scroll
+  disableMutationObserver: false, // disables automatic mutations' detections (advanced)
+  debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
+  throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
+
+
+  // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
+  offset: 100, // offset (in px) from the original trigger point
+  delay: 0, // values from 0 to 3000, with step 50ms
+  duration: 800, // values from 0 to 3000, with step 50ms
+  easing: 'ease', // default easing for AOS animations
+  once: true, // whether animation should happen only once - while scrolling down
+  mirror: false, // whether elements should animate out while scrolling past them
+  anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+});

@@ -1,1 +1,0 @@
-$(document).ready(function(){$(".top_menu_right li").click(function(t){var e=$(this).data("value"),o=$("header.top_header").height();o||(o=0),$("html,body").animate({scrollTop:$("#"+e).offset().top-o},500)})});
