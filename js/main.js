@@ -19,6 +19,8 @@ loadData()
   });
 // Preloader end
 
+window.addEventListener('beforeunload', (e)=>{window.scroll(0,0);})
+
 document.querySelectorAll('nav li').forEach(s=>{
   s.addEventListener('click', event => {
     event.preventDefault();
